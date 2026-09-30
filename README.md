@@ -38,7 +38,7 @@ bash RS_onestep/train.sh RS_onestep/config.json --resume runs/rs_onestep/checkpo
 把待处理的**原始低分辨率图像**放入 `data/test_lr/`，默认输出尺寸为输入的 4 倍：
 
 ```bash
-bash infer.sh --checkpoint /data/vjuicefs_ai_camera_jgroup_acadmic/public_data/11188740/code/Rs_onestep-main/exp/checkpoints/step-0000020.pt --input /data/vjuicefs_ai_camera_jgroup_acadmic/public_data/11188740/data/RealSR_CenterCrop/test_LR --output outputs --upscale 4
+bash infer.sh --checkpoint /data/vjuicefs_ai_camera_jgroup_acadmic/public_data/11188740/code/Rs_onestep-main/exp/checkpoints/step-0000020.pt --input /data/vjuicefs_ai_camera_jgroup_acadmic/public_data/11188740/data/RealSR_CenterCrop/test_LR --output outputs --upscale 4 --gray-output
 ```
 
-`--input` 也可指向单张图片。如果输入图已经预先放大到目标尺寸，命令末尾加 `--upscale 1`。
+`--input` 也可指向单张图片。如果输入图已经预先放大到目标尺寸，命令末尾加 `--upscale 1`。如果推理单通道图可以增加 `--gray-output`
