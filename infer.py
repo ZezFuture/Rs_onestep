@@ -96,10 +96,10 @@ def main():
     parser.add_argument("--sd21", help="Override SD2.1 location from checkpoint")
     parser.add_argument("--taesd", help="Override TAESD location from checkpoint")
     parser.add_argument("--prompt", help="Override prompt from checkpoint")
-    parser.add_argument("--upscale",type=float,default=4.0,help="Bicubic pre-upscale factor before restoration; use 1.0 to disable resizing"
-)
+    parser.add_argument("--upscale",type=float,default=4.0,help="Bicubic pre-upscale factor before restoration; use 1.0 to disable resizing")
     parser.add_argument("--tile-size", type=int, default=512)
     parser.add_argument("--tile-overlap", type=int, default=64)
+    parser.add_argument("--gray-output", action="store_true", help="Average RGB channels and save as grayscale")
     args = parser.parse_args()
     if not torch.cuda.is_available():
         raise RuntimeError("Inference requires a CUDA GPU")
@@ -143,11 +143,18 @@ def main():
             if args.upscale != 1:
                 image = F.interpolate(image, scale_factor=args.upscale, mode="bicubic", align_corners=False).clamp(0, 1)
             sr = enhance(model, image, text, args.tile_size, args.tile_overlap, amp)
-            array = (((sr[0].permute(1, 2, 0) + 1) * 0.5).clamp(0, 1).cpu().numpy() * 255).round().astype(np.uint8)
+            sr = ((sr[0] + 1) * 0.5).clamp(0, 1)
+            if args.gray_output:
+                array = (sr.mean(dim=0).cpu().numpy() * 255).round().astype(np.uint8)
+            else:
+                array = (sr.permute(1, 2, 0).cpu().numpy() * 255).round().astype(np.uint8)
             relative = path.relative_to(source) if source.is_dir() else Path(path.name)
             output_path = destination / relative.with_suffix(".png")
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            Image.fromarray(array, "RGB").save(output_path)
+            if args.gray_output:
+                Image.fromarray(array, "L").save(output_path)
+            else:
+                Image.fromarray(array, "RGB").save(output_path)
             print(f"{path} -> {output_path}", flush=True)
 
 if __name__ == "__main__":
