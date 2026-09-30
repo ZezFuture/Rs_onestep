@@ -2,7 +2,7 @@
 
 import torch
 
-from .siglip2_pair_sr_reward_optional_fidelity import SigLIP2PairSRReward
+from siglip2_pair_sr_reward_optional_fidelity import SigLIP2PairSRReward
 
 
 ARCH_KEYS = (
