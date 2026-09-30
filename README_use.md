@@ -33,16 +33,12 @@ bash RS_onestep/train.sh RS_onestep/config.json
 bash RS_onestep/train.sh RS_onestep/config.json --resume runs/rs_onestep/checkpoints/step-0001000.pt
 ```
 
-时间步为 800 的旧检查点不能用于当前时间步 500 的模型；请使用本版本训练生成的检查点。
-
 ## 3. 推理
 
 把待处理的**原始低分辨率图像**放入 `data/test_lr/`，默认输出尺寸为输入的 4 倍：
 
 ```bash
-bash RS_onestep/infer.sh --checkpoint runs/rs_onestep/checkpoints/final.pt --input data/test_lr --output outputs
+bash infer.sh --checkpoint /data/vjuicefs_ai_camera_jgroup_acadmic/public_data/11188740/code/Rs_onestep-main/exp/checkpoints/step-0000020.pt --input /data/vjuicefs_ai_camera_jgroup_acadmic/public_data/11188740/data/RealSR_CenterCrop/test_LR --output outputs --upscale 4
 ```
 
 `--input` 也可指向单张图片。如果输入图已经预先放大到目标尺寸，命令末尾加 `--upscale 1`。
-
-当前训练和推理使用同一个时间步 **500**；生成器损失为 `1×潜变量 MSE + 2×VGG LPIPS + gan_weight×对抗损失`，不使用 FDL。
