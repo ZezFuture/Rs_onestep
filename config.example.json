@@ -7,14 +7,14 @@
   "output_dir": "runs/rs_onestep",
   "resolution": 512,
   "prompt": "high quality, sharp, detailed image",
-  "batch_size": 1,
-  "target_global_batch_size": 12,
+  "batch_size": 16,
+  "target_global_batch_size": 192,
   "grad_accum_steps": null,
   "num_workers": 4,
   "max_epochs": 100,
   "max_steps": 50000,
-  "save_every": 1000,
-  "log_every": 1,
+  "save_every": 2000,
+  "log_every": 10,
   "loss_window_size": 100,
   "eval_freq": 500,
   "precision": "bf16",
@@ -59,3 +59,5 @@
     "normalize_global_feature": true
   }
 }
+
+
